@@ -1,21 +1,19 @@
 import React from "react";
 import { Routes, Route, Router } from "react-router-dom";
-import Dashboard from "./components/Dashboard";
-import ProtectedRoute from "./components/ProtectedRoute";
+import ProtectedRoute from "./routes/ProtectedRoute";
 import Logout from "./components/Logout";
 import RegisterForm from "./components/authentification/RegisterComponent";
 import LoginForm from "./components/authentification/LoginComponent";
-import Header from "./components/Header";
-import EventList from "./components/events/EventList";
 import Layout from "./components/layout/Layout";
 import EventCreateForm from "./components/EventCreateFrom";
 import HomePage from "./pages/HomePage";
 import AboutPage from "./pages/AboutPage";
 import NotFoundPage from "./pages/NotFoundPage";
-import PrivateRoute from "./routes/PrivateRoute";
+
 import EventForm from "./components/events/EventForm";
 import UserDashboard from "./pages/UserDashboard";
 import AdminDashboard from "./pages/AdminDashboard";
+import EventList from "./components/events/EventList";
 
 function App() {
   return (
@@ -52,25 +50,25 @@ function App() {
           <Route
             path="/admin"
             element={
-              <PrivateRoute role="admin">
+              <ProtectedRoute role="ADMIN">
                 <AdminDashboard />
-              </PrivateRoute>
+              </ProtectedRoute>
             }
           />
           <Route
             path="/user"
             element={
-              <PrivateRoute role="user">
+              <ProtectedRoute role="USER">
                 <UserDashboard />
-              </PrivateRoute>
+              </ProtectedRoute>
             }
           />
           <Route
             path="/events/create"
             element={
-              <PrivateRoute role="admin">
+              <ProtectedRoute role="ADMIN">
                 <EventForm onSave={() => {}} />
-              </PrivateRoute>
+              </ProtectedRoute>
             }
           />
         </Routes>

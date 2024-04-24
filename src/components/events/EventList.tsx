@@ -1,12 +1,21 @@
 // components/EventList.tsx
 import React, { useEffect, useState } from "react";
 import { deleteEvent, getEvents } from "../../services/eventService";
-import { Button } from "@mui/material";
+import { Alert, Button } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import EventCard from "./EventCard1";
 const EventList: React.FC = () => {
   const [events, setEvents] = useState([]);
+  const [error, setError] = useState<string | null>(null);
+  const [success, setSuccess] = useState<string | null>(null);
   const navigate = useNavigate();
+  const handleSuccess = (message: string) => {
+    setSuccess(message);
+  };
+
+  const handleError = (message: string) => {
+    setError(message);
+  };
   useEffect(() => {
     const fetchEvents = async () => {
       try {
@@ -16,7 +25,7 @@ const EventList: React.FC = () => {
         console.error("There was an error fetching the events", error);
       }
     };
-
+   
     fetchEvents();
   }, []);
   const handleEditClick = () => {
@@ -33,6 +42,8 @@ const EventList: React.FC = () => {
   return (
     <div>
       <h2 style={{ textAlign: "center" }}>Liste des événements</h2>
+      {error && <Alert color="error">{error}</Alert>}
+      {success && <Alert color="success">{success}</Alert>}
       <Button
         variant="contained"
         sx={{ borderRadius: "12px", background: "green", color: "white", marginBottom: 2 }}
@@ -43,7 +54,7 @@ const EventList: React.FC = () => {
       </Button>
       {events.map((event: any) => (
         <>
-          <EventCard key={event.id} event={event} onDelete={() => handleDelete(event.id)} />
+          <EventCard key={event.id} event={event} onDelete={() => handleDelete(event.id)} onError={handleError} onSuccess={handleSuccess} /> 
         </>
       ))}
     </div>

@@ -7,10 +7,12 @@ import { deleteEvent } from '../../services/eventService';
 
 interface EventCardProps {
   event: Evenement;
-  onDelete: (id: number) => void;  // Callback to trigger after delete
+  onDelete: (id: number) => void; 
+  onError?: (message: string) => void;
+  onSuccess?: (message: string) => void;
 }
 
-const EventCard: React.FC<EventCardProps> = ({ event, onDelete }) => {
+const EventCard: React.FC<EventCardProps> = ({ event, onDelete , onError, onSuccess }) => {
   const navigate = useNavigate();
 
   const handleEdit = () => {
@@ -18,8 +20,22 @@ const EventCard: React.FC<EventCardProps> = ({ event, onDelete }) => {
   };
 
   const handleDelete = async () => {
-    await deleteEvent(event.id+'');
-    onDelete(event.id as number);
+    // add confirmation dialog here
+    const confirmDelete = window.confirm('Vous êtes sûr de vouloir supprimer cet événement?');
+    if (!confirmDelete) {
+      return;
+    }
+    try {
+      await deleteEvent(event.id+'');
+      if (onSuccess) {  // Check if onSuccess callback is provided
+        onSuccess('L\'événement a été supprimé avec succès');
+      }
+      onDelete(event.id as number);
+    } catch (error:any) {
+      if (onError) {  // Check if onError callback is provided
+        onError('On a échoué à supprimer l\'événement: ' + (error.response?.data?.message || error.message));
+      }
+    }
   };
 
   return (
@@ -53,7 +69,7 @@ const EventCard: React.FC<EventCardProps> = ({ event, onDelete }) => {
         </Typography>
       </CardContent>
       <CardActions>
-        <Button size="small" onClick={() => navigate(`/events/${event.id}`)}>Détails</Button>
+        <Button size="small" onClick={() => navigate(`/events/${event.id}`)}>Réserver</Button>
         <Button size="small" onClick={() => navigate(`/events/${event.id}`)}>Détails</Button>
         <Button size="small" onClick={handleEdit}>Modifier</Button>
         <Button size="small" onClick={handleDelete}>Supprimer</Button>

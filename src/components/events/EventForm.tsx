@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Button, TextField, Box, Switch, FormControlLabel, Typography } from '@mui/material';
 import { Evenement } from '../../types/eventTypes';
 import { createEvent, updateEvent } from '../../services/eventService';
+import { useNavigate } from 'react-router-dom';
 
 interface EventFormProps {
   event?: Evenement;
@@ -22,7 +23,8 @@ const EventForm: React.FC<EventFormProps> = ({ event, onSave }) => {
     image: '',
     categorie: ''
   });
-
+  const [errorevent,setErrorevent] = useState<string | null>(null);
+  const navigate = useNavigate();
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value, type } = e.target;
     setFormData({
@@ -43,15 +45,18 @@ const EventForm: React.FC<EventFormProps> = ({ event, onSave }) => {
       } else {
         await createEvent(formData);
       }
-      onSave();  // Trigger any additional actions on save
-    } catch (error) {
-      console.error('Failed to save the event:', error);
+      onSave(); 
+      navigate('/events');
+    } catch (error:any) {
+      setErrorevent('Failed to create or update the event: ' + (error.response?.data?.message || error.message));
+      console.error('Failed to create or update the event', (error.response?.data?.message || error.message));
     }
   };
 
   return (
-    <Box component="form" onSubmit={handleSubmit} sx={{ width: '100%' }}>
+    <Box component="form" onSubmit={handleSubmit} sx={{ width: '100%' , padding : '50px'}}>
       <Typography variant="h6">{event ? "Edit Event" : "Create Event"}</Typography>
+      {errorevent && <Typography color="error">{errorevent}</Typography>}
       <TextField
         label="Title"
         name="titre"
