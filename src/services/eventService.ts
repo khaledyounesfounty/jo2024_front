@@ -6,6 +6,8 @@ const createEvent = (eventData: any) => axiosInstance.post('/events', eventData)
 const updateEvent = (id: string, eventData: any) => axiosInstance.put(`/events/${id}`, eventData);
 const deleteEvent = (id: string) => axiosInstance.delete(`/events/${id}`);
 const getEventsByCategory = (category: string) => axiosInstance.get(`/events/search/category/${category}`);
+// fetchEventsByCriteria 
+const getEventsByCriteria = (criteria: string) => axiosInstance.get(`/events/search/criteria/${criteria}`);
 
 export {
   getEvents,
@@ -14,4 +16,5 @@ export {
   updateEvent,
   deleteEvent,
   getEventsByCategory,
+  getEventsByCriteria
 };

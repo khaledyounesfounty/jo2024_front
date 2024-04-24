@@ -8,7 +8,7 @@ import {
   Button,
   Box,
 } from "@mui/material";
-import { Evenement } from "../types/Evenement";
+import { Evenement } from "../types/eventTypes";
 import DeleteIcon from "@mui/icons-material/Delete";
 import CreateIcon from "@mui/icons-material/Create";
 import { useNavigate } from "react-router-dom";
