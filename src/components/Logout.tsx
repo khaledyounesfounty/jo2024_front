@@ -6,8 +6,9 @@ const Logout: React.FC = () => {
     const navigate = useNavigate();
 
     useEffect(() => {
-        logout(); // Clear authentication token and user data
-        navigate('/login'); // Redirect to login page
+        logout();
+        navigate('/login'); 
+        window.location.reload();
     }, [navigate]);
 
     // Optionally, display a loading message or spinner here

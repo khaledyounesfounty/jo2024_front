@@ -1,4 +1,3 @@
-// src/components/events/EventCard.tsx
 import React from 'react';
 import { Card, CardContent, CardActions, Typography, Button, CardMedia } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
@@ -33,7 +32,7 @@ const EventCard: React.FC<EventCardProps> = ({ event, onDelete , onError, onSucc
       onDelete(event.id as number);
     } catch (error:any) {
       if (onError) {  // Check if onError callback is provided
-        onError('On a échoué à supprimer l\'événement: ' + (error.response?.data?.message || error.message));
+        onError('Erreur lors de la suppression de l\'événement : ' + (error.response?.data?.message || error.message));
       }
     }
   };

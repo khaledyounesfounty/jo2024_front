@@ -32,7 +32,8 @@ const LoginComponent: React.FC = () => {
     setError("");
     try {
       await login({ username, password });
-      navigate("/dashboard"); // Make sure the '/dashboard' route is properly defined in your routing setup
+      navigate("/");
+      window.location.reload(); 
     } catch (error: any) {
       setError(error.response?.data || "Échec de la connexion");
     }

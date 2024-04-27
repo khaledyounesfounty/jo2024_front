@@ -17,7 +17,6 @@ const AdminDashboard: React.FC = () => {
       <Button onClick={handleCreateNewEvent} variant="contained" color="primary">
         Create New Event
       </Button>
-      <EventList />
     </div>
   );
 };

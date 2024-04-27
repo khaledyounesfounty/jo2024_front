@@ -83,16 +83,7 @@ const EventForm: React.FC<EventFormProps> = ({ event, onSave }) => {
         fullWidth
         margin="normal"
       />
-      <TextField
-        label="Description"
-        name="description"
-        value={formData.description}
-        onChange={handleChange}
-        fullWidth
-        margin="normal"
-        multiline
-        rows={4}
-      />
+      
       <TextField
         label="Max Capacity"
         name="nombreDePlacesMax"
@@ -130,6 +121,7 @@ const EventForm: React.FC<EventFormProps> = ({ event, onSave }) => {
         fullWidth
         margin="normal"
       />
+      {/* Todo : Cette input doit etre un SlectFile type image (jpg, png, jpeg) , taille max 2Mo */}
       <TextField
         label="Image URL"
         name="image"
@@ -138,6 +130,7 @@ const EventForm: React.FC<EventFormProps> = ({ event, onSave }) => {
         fullWidth
         margin="normal"
       />
+      {/* Todo : on veut que cette champs devient une select list qui charge d'un Json(src/data/eventCategories.json) */}
       <TextField
         label="Category"
         name="categorie"
@@ -145,6 +138,16 @@ const EventForm: React.FC<EventFormProps> = ({ event, onSave }) => {
         onChange={handleChange}
         fullWidth
         margin="normal"
+      />
+      <TextField
+        label="Description"
+        name="description"
+        value={formData.description}
+        onChange={handleChange}
+        fullWidth
+        margin="normal"
+        multiline
+        rows={4}
       />
       <Button type="submit" variant="contained" color="primary" sx={{ mt: 2 }}>
         {event ? "Update Event" : "Create Event"}
