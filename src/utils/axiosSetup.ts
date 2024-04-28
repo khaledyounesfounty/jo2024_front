@@ -1,18 +1,7 @@
 import axios from "axios";
 
 // Ajout du token dans le header de chaque requête
-axios.interceptors.request.use(
-  (config) => {
-    const token = localStorage.getItem("jwtToken");
-    if (token && config.headers) {
-      config.headers["Authorization"] = `Bearer ${token}`;
-    }
-    return config;
-  },
-  (error) => {
-    return Promise.reject(error);
-  }
-);
+
 
 // Redirection vers la page de connexion si le token est invalide
 axios.interceptors.response.use(
@@ -30,5 +19,22 @@ axios.interceptors.response.use(
 const axiosInstance = axios.create({
   baseURL: "http://localhost:8080/api/v1",
 });
+
+axiosInstance.interceptors.request.use(
+  (config) => {
+    const token = localStorage.getItem('jwtToken');
+    console.log('Token from localStorage:', token);  // Debug: Log token value
+    if (token && config.headers) {
+      config.headers["Authorization"] = `Bearer ${token}`;
+      console.log('Headers after adding token:', config.headers);  // Debug: Log headers
+    }
+    return config;
+  },
+  (error) => {
+    console.error('Error in request interceptor:', error);
+    return Promise.reject(error);
+  }
+);
+
 
 export default axiosInstance;

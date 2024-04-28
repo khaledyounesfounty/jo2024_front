@@ -4,7 +4,7 @@ import { Evenement } from '../../types/eventTypes';
 import { getEventsByCriteria } from '../../services/eventService';
 
 interface SearchEventsProps {
-  onSearchResult: (results: Evenement[]) => void; // Callback to handle the search results
+  onSearchResult: (results: Evenement[]) => void; 
 }
 
 const SearchEvents: React.FC<SearchEventsProps> = ({ onSearchResult }) => {
@@ -21,7 +21,7 @@ const SearchEvents: React.FC<SearchEventsProps> = ({ onSearchResult }) => {
     }
     try {
       const response = await getEventsByCriteria(searchTerm);
-      onSearchResult(response.data); // Assuming the API returns the filtered events
+      onSearchResult(response.data); 
     } catch (error) {
       console.error('Une erreur s\'est produite lors de la recherche des événements:', error);
     }

@@ -14,27 +14,40 @@ import UserDashboard from "./pages/UserDashboard";
 import AdminDashboard from "./pages/AdminDashboard";
 import EventList from "./components/events/EventList";
 import { isAuthenticated } from "./utils/authUtils";
+import EventDetail from "./components/events/EventDetail";
+import Panier from "./pages/Panier";
+import PaymentForm from "./pages/PaymentForm";
+import BilletList from "./components/billet/BilletList";
 
 function App() {
   const redirectIfAuthenticated = (component: React.ReactNode) => {
     return isAuthenticated() ? <Navigate to="/" replace /> : component;
   };
-  // if !isAuthenticated() disable logout 
+  // if !isAuthenticated() disable logout
   const logout = () => {
     if (!isAuthenticated()) {
       return <Navigate to="/" replace />;
+    } else {
+      return <Logout />;
     }
-  }
+  };
   return (
     <div className="App">
       <Layout>
         <Routes>
-        <Route path="/login" element={redirectIfAuthenticated(<LoginForm />)} />
-          <Route path="/register" element={redirectIfAuthenticated(<RegisterForm />)} />
+          <Route
+            path="/login"
+            element={redirectIfAuthenticated(<LoginForm />)}
+          />
+          <Route
+            path="/register"
+            element={redirectIfAuthenticated(<RegisterForm />)}
+          />
           <Route path="/logout" element={logout()} />
           <Route path="/" element={<HomePage />} />
           <Route path="/about" element={<AboutPage />} />
           <Route path="/events" element={<EventList />} />
+          <Route path="/events/:id" element={<EventDetail />} />
           <Route path="*" element={<NotFoundPage />} />
           <Route
             path="/admin"
@@ -49,6 +62,30 @@ function App() {
             element={
               <ProtectedRoute role="USER">
                 <UserDashboard />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/user/panier"
+            element={
+              <ProtectedRoute role="USER">
+                <Panier />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/payment"
+            element={
+              <ProtectedRoute role="USER">
+                <PaymentForm />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/billets"
+            element={
+              <ProtectedRoute role="USER">
+                <BilletList />
               </ProtectedRoute>
             }
           />

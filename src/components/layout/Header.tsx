@@ -28,7 +28,7 @@ if (isAuthenticated()) {
     settings.push({ name: "Dashboard", path: "/admin" });
   } else if (hasRole("USER")) {
     settings.push({ name: "Dashboard", path: "/user" });
-    settings.push({ name: "Panier", path: "/panier" });
+    settings.push({ name: "Panier", path: "/user/panier" });
   }
   settings.push({ name: "Logout", path: "/logout" });
 } else {
