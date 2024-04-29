@@ -1,4 +1,3 @@
-import Offre from '../types/offre.model';
 import axiosInstance from '../utils/axiosSetup';
 
 const getEvents = () => axiosInstance.get('/events');

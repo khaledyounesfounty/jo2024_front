@@ -1,38 +1,57 @@
-import React from 'react';
-import { Card, CardContent, CardActions, Typography, Button, CardMedia } from '@mui/material';
-import { useNavigate } from 'react-router-dom';
-import { Evenement } from '../../types/eventTypes';
-import { deleteEvent } from '../../services/eventService';
+import React from "react";
+import {
+  Card,
+  CardContent,
+  CardActions,
+  Typography,
+  Button,
+  CardMedia,
+} from "@mui/material";
+import { useNavigate } from "react-router-dom";
+import { Evenement } from "../../types/eventTypes";
+import { deleteEvent } from "../../services/eventService";
+import { hasRole } from "../../utils/authUtils";
 
 interface EventCardProps {
   event: Evenement;
-  onDelete: (id: number) => void; 
+  onDelete: (id: number) => void;
   onError?: (message: string) => void;
   onSuccess?: (message: string) => void;
 }
 
-const EventCard: React.FC<EventCardProps> = ({ event, onDelete , onError, onSuccess }) => {
+const EventCard: React.FC<EventCardProps> = ({
+  event,
+  onDelete,
+  onError,
+  onSuccess,
+}) => {
   const navigate = useNavigate();
-
   const handleEdit = () => {
     navigate(`/events/edit/${event.id}`);
   };
 
   const handleDelete = async () => {
     // add confirmation dialog here
-    const confirmDelete = window.confirm('Vous êtes sûr de vouloir supprimer cet événement?');
+    const confirmDelete = window.confirm(
+      "Vous êtes sûr de vouloir supprimer cet événement?"
+    );
     if (!confirmDelete) {
       return;
     }
     try {
-      await deleteEvent(event.id+'');
-      if (onSuccess) {  // Check if onSuccess callback is provided
-        onSuccess('L\'événement a été supprimé avec succès');
+      await deleteEvent(event.id + "");
+      if (onSuccess) {
+        // Check if onSuccess callback is provided
+        onSuccess("L'événement a été supprimé avec succès");
       }
       onDelete(event.id as number);
-    } catch (error:any) {
-      if (onError) {  // Check if onError callback is provided
-        onError('Erreur lors de la suppression de l\'événement : ' + (error.response?.data?.message || error.message));
+    } catch (error: any) {
+      if (onError) {
+        // Check if onError callback is provided
+        onError(
+          "Erreur lors de la suppression de l'événement : " +
+            (error.response?.data?.message || error.message)
+        );
       }
     }
   };
@@ -61,17 +80,41 @@ const EventCard: React.FC<EventCardProps> = ({ event, onDelete , onError, onSucc
           {event.description}
         </Typography>
         <Typography variant="body2" color="text.secondary">
-          Places disponibles: {event.nombreDePlacesDisponibles} / {event.nombreDePlacesMax}
+          Places disponibles: {event.nombreDePlacesDisponibles} /{" "}
+          {event.nombreDePlacesMax}
         </Typography>
         <Typography variant="body2" color="text.secondary">
           Prix: {event.prixUnitaire.toFixed(2)} €
         </Typography>
       </CardContent>
       <CardActions>
-        <Button size="small" onClick={() => navigate(`/events/${event.id}`)}>Réserver</Button>
-        <Button size="small" onClick={() => navigate(`/events/${event.id}`)}>Détails</Button>
-        <Button size="small" onClick={handleEdit}>Modifier</Button>
-        <Button size="small" onClick={handleDelete}>Supprimer</Button>
+        {
+          // display this if hasrole('user')
+          hasRole("USER") && (
+            <Button
+              size="small"
+              onClick={() => navigate(`/events/${event.id}`)}
+            >
+              Réserver
+            </Button>
+          )
+        }
+        <Button size="small" onClick={() => navigate(`/events/${event.id}`)}>
+          Détails
+        </Button>
+        {
+          // display this if hasrole('admin')
+          hasRole("ADMIN") && (
+            <>
+              <Button size="small" onClick={handleEdit}>
+                Modifier
+              </Button>
+              <Button size="small" onClick={handleDelete}>
+                Supprimer
+              </Button>
+            </>
+          )
+        }
       </CardActions>
     </Card>
   );

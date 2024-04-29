@@ -23,11 +23,9 @@ const EventCard: React.FC<EventCardProps> = ({ event }) => {
     if (window.confirm("Are you sure you want to delete this event?")) {
       try {
         await deleteEvent(event.id + "");
-        // Optionally, navigate to another route after deletion
         navigate("/eventlist");
       } catch (error) {
         console.error("Error deleting the event", error);
-        // Handle error (e.g., display an error message to the user)
       }
     }
   };

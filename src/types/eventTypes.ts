@@ -1,3 +1,5 @@
+import Offre from "./offre.model";
+
 export interface Evenement {
     id?: number;
     titre: string;
@@ -10,4 +12,5 @@ export interface Evenement {
     prixUnitaire: number;
     image: string;
     categorie: string;
+    offres: Offre[];
   }

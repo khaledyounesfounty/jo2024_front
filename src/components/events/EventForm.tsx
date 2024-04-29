@@ -1,8 +1,23 @@
-import React, { useState } from 'react';
-import { Button, TextField, Box, Switch, FormControlLabel, Typography } from '@mui/material';
-import { Evenement } from '../../types/eventTypes';
-import { createEvent, updateEvent } from '../../services/eventService';
-import { useNavigate } from 'react-router-dom';
+import React, { useEffect, useState } from "react";
+import {
+  Button,
+  TextField,
+  Box,
+  Switch,
+  FormControlLabel,
+  Typography,
+  FormControl,
+  InputLabel,
+  Select,
+  OutlinedInput,
+  Chip,
+  MenuItem,
+} from "@mui/material";
+import { Evenement } from "../../types/eventTypes";
+import { createEvent, updateEvent } from "../../services/eventService";
+import { useNavigate } from "react-router-dom";
+import { getOffres } from "../../services/offreService";
+import Offre from "../../types/offre.model";
 
 interface EventFormProps {
   event?: Evenement;
@@ -10,52 +25,82 @@ interface EventFormProps {
 }
 
 const EventForm: React.FC<EventFormProps> = ({ event, onSave }) => {
-  const [formData, setFormData] = useState<Evenement>(event || {
-    id: 0,
-    titre: '',
-    dateEvent: '',
-    lieu: '',
-    description: '',
-    nombreDePlacesMax: 0,
-    nombreDePlacesDisponibles: 0,
-    isDisponible: true,
-    prixUnitaire: 0,
-    image: '',
-    categorie: ''
+  const [formData, setFormData] = useState({
+    ...event,
+    nombreDePlacesMax: event?.nombreDePlacesMax || 0,
+    nombreDePlacesDisponibles: event?.nombreDePlacesDisponibles || 0,
+    isDisponible: event?.isDisponible || true,
+    prixUnitaire: event?.prixUnitaire || 0,
+    image: event?.image || "",
+    categorie: event?.categorie || "",
+    offres: event?.offres || [],
   });
-  const [errorevent,setErrorevent] = useState<string | null>(null);
+  const [errorevent, setErrorevent] = useState<string | null>(null);
   const navigate = useNavigate();
+  const [allOffres, setAllOffres]: [Offre[], any] = useState([]);
+  const [selectedOffres, setSelectedOffres] = useState(event?.offres || []);
+
+  useEffect(() => {
+    const fetchOffres = async () => {
+      const response = await getOffres();
+      setAllOffres(response.data);
+    };
+    fetchOffres();
+  }, []);
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value, type } = e.target;
     setFormData({
       ...formData,
-      [name]: type === 'number' ? parseInt(value) : value
+      [name]: type === "number" ? parseInt(value) : value,
     });
   };
 
   const handleSwitchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setFormData({ ...formData, isDisponible: event.target.checked });
+    setFormData({ ...formData, [event.target.name]: event.target.checked });
+  };
+
+  const handleSelectOffres = (event:any) => {
+    const {
+      target: { value },
+    } = event;
+    setSelectedOffres(typeof value === "string" ? value.split(",") : value);
+    // update the data form 
+    setFormData({ ...formData, offres: value });
+    console.log("Selected Offres", selectedOffres);
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
+      console.log("Data to save", formData);
       if (formData.id) {
-        await updateEvent(formData.id+'', formData);
+        await updateEvent(formData.id + "", formData);
       } else {
         await createEvent(formData);
       }
-      onSave(); 
-      navigate('/events');
-    } catch (error:any) {
-      setErrorevent('Failed to create or update the event: ' + (error.response?.data?.message || error.message));
-      console.error('Failed to create or update the event', (error.response?.data?.message || error.message));
+      onSave();
+      navigate("/events");
+    } catch (error: any) {
+      setErrorevent(
+        "Failed to create or update the event: " +
+          (error.response?.data?.message || error.message)
+      );
+      console.error(
+        "Failed to create or update the event",
+        error.response?.data?.message || error.message
+      );
     }
   };
 
   return (
-    <Box component="form" onSubmit={handleSubmit} sx={{ width: '100%' , padding : '50px'}}>
-      <Typography variant="h6">{event ? "Edit Event" : "Create Event"}</Typography>
+    <Box
+      component="form"
+      onSubmit={handleSubmit}
+      sx={{ width: "100%", padding: "50px" }}
+    >
+      <Typography variant="h6">
+        {event ? "Edit Event" : "Create Event"}
+      </Typography>
       {errorevent && <Typography color="error">{errorevent}</Typography>}
       <TextField
         label="Title"
@@ -83,7 +128,7 @@ const EventForm: React.FC<EventFormProps> = ({ event, onSave }) => {
         fullWidth
         margin="normal"
       />
-      
+
       <TextField
         label="Max Capacity"
         name="nombreDePlacesMax"
@@ -149,6 +194,39 @@ const EventForm: React.FC<EventFormProps> = ({ event, onSave }) => {
         multiline
         rows={4}
       />
+      <FormControl fullWidth margin="normal">
+        <InputLabel id="demo-multiple-chip-label">Offres</InputLabel>
+        <Select
+          labelId="demo-multiple-chip-label"
+          multiple
+          value={selectedOffres}
+          onChange={handleSelectOffres}
+          input={<OutlinedInput id="select-multiple-chip" label="Offres" />}
+          renderValue={(selected) => (
+            <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}>
+              {selected.map((selectedId) => {
+                const offer = allOffres.find(
+                  (offer) => offer.id === Number(selectedId)
+                );
+                if (!offer) return null; // This ensures no undefined or null values are processed further.
+                return (
+                  <Chip
+                    key={offer.id} // Ensuring `key` is always a unique and defined value
+                    label={offer.titre} // Using the `titre` from the found offer
+                  />
+                );
+              })}
+            </Box>
+          )}
+        >
+          {allOffres.map((offre) => (
+            <MenuItem key={offre.id} value={offre.id}>
+              {offre.titre}
+            </MenuItem>
+          ))}
+        </Select>
+      </FormControl>
+
       <Button type="submit" variant="contained" color="primary" sx={{ mt: 2 }}>
         {event ? "Update Event" : "Create Event"}
       </Button>

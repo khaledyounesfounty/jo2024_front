@@ -18,6 +18,7 @@ import EventDetail from "./components/events/EventDetail";
 import Panier from "./pages/Panier";
 import PaymentForm from "./pages/PaymentForm";
 import BilletList from "./components/billet/BilletList";
+import OffresCrud from "./components/offres/OffresCrud";
 
 function App() {
   const redirectIfAuthenticated = (component: React.ReactNode) => {
@@ -97,6 +98,7 @@ function App() {
               </ProtectedRoute>
             }
           />
+          <Route path="/admin/offres" element={<ProtectedRoute role="ADMIN"><OffresCrud /></ProtectedRoute>} /> 
         </Routes>
       </Layout>
     </div>

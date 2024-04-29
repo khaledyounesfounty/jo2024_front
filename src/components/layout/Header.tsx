@@ -24,9 +24,10 @@ let settings: { name: string; path: string }[] = [];
 if (isAuthenticated()) {
   settings.push({ name: "Profile", path: "/profile" });
   if (hasRole("ADMIN")) {
-    pages.push({ name: "Offres", path: "/offres" });
+    pages.push({ name: "Offres", path: "/admin/offres" });
     settings.push({ name: "Dashboard", path: "/admin" });
   } else if (hasRole("USER")) {
+    settings.push({ name: "Mes Billets", path: "/billets" });
     settings.push({ name: "Dashboard", path: "/user" });
     settings.push({ name: "Panier", path: "/user/panier" });
   }
