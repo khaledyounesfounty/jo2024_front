@@ -58,6 +58,15 @@ function App() {
               </ProtectedRoute>
             }
           />
+
+          <Route
+            path="/events/edit/:id"
+            element={
+              <ProtectedRoute role="ADMIN">
+               <EventForm onSave={() => {}} />
+              </ProtectedRoute>
+            }
+          />
           <Route
             path="/user"
             element={

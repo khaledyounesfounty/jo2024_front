@@ -33,7 +33,7 @@ const EventForm: React.FC<EventFormProps> = ({ event, onSave }) => {
     prixUnitaire: event?.prixUnitaire || 0,
     image: event?.image || "",
     categorie: event?.categorie || "",
-    offres: event?.offres || [],
+    offreIds: event?.offreIds || [],
   });
   const [errorevent, setErrorevent] = useState<string | null>(null);
   const navigate = useNavigate();
@@ -42,8 +42,14 @@ const EventForm: React.FC<EventFormProps> = ({ event, onSave }) => {
 
   useEffect(() => {
     const fetchOffres = async () => {
-      const response = await getOffres();
-      setAllOffres(response.data);
+      try {
+        const response = await getOffres();
+        setAllOffres(response.data);
+      } catch (error) {
+        setErrorevent(
+          "Une erreur s'est produite lors de la récupération des offres "
+        );
+      }
     };
     fetchOffres();
   }, []);
@@ -59,12 +65,11 @@ const EventForm: React.FC<EventFormProps> = ({ event, onSave }) => {
     setFormData({ ...formData, [event.target.name]: event.target.checked });
   };
 
-  const handleSelectOffres = (event:any) => {
+  const handleSelectOffres = (event: any) => {
     const {
       target: { value },
     } = event;
     setSelectedOffres(typeof value === "string" ? value.split(",") : value);
-    // update the data form 
     setFormData({ ...formData, offres: value });
     console.log("Selected Offres", selectedOffres);
   };

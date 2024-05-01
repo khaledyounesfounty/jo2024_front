@@ -12,5 +12,6 @@ export interface Evenement {
     prixUnitaire: number;
     image: string;
     categorie: string;
-    offres: Offre[];
+    offreIds?: number[];
+    offres?: Offre[];
   }

@@ -58,13 +58,13 @@ const OffresCrud: React.FC = () => {
   }, []);
 
   const fetchOffres = async () => {
-    const response = await getOffres();
-    if (response.status !== 200) {
-      setError("Le chargement des offres a échoué.");
-    } else {
+      try {
+        const response = await getOffres();
       setSuccess("Les offres ont été chargées avec succès.");
       setOffres(response.data);
-    }
+      } catch (error) {
+        setError("Le chargement des offres a échoué.");
+      }
   };
 
   const handleSave = async (offre: Offre) => {
