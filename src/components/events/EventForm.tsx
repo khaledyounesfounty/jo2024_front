@@ -33,12 +33,12 @@ const EventForm: React.FC<EventFormProps> = ({ event, onSave }) => {
     prixUnitaire: event?.prixUnitaire || 0,
     image: event?.image || "",
     categorie: event?.categorie || "",
-    offreIds: event?.offreIds || [],
+    offresIds: [],
   });
   const [errorevent, setErrorevent] = useState<string | null>(null);
   const navigate = useNavigate();
   const [allOffres, setAllOffres]: [Offre[], any] = useState([]);
-  const [selectedOffres, setSelectedOffres] = useState(event?.offres || []);
+  const [selectedOffres, setSelectedOffres] = useState<string[]>([]);
 
   useEffect(() => {
     const fetchOffres = async () => {
@@ -70,13 +70,15 @@ const EventForm: React.FC<EventFormProps> = ({ event, onSave }) => {
       target: { value },
     } = event;
     setSelectedOffres(typeof value === "string" ? value.split(",") : value);
-    setFormData({ ...formData, offres: value });
+    setFormData({ ...formData , offresIds: value });
     console.log("Selected Offres", selectedOffres);
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
+      // get last version of the form data
+    
       console.log("Data to save", formData);
       if (formData.id) {
         await updateEvent(formData.id + "", formData);

@@ -1,4 +1,4 @@
-import Offre from "./offre.model";
+
 
 export interface Evenement {
     id?: number;
@@ -12,6 +12,4 @@ export interface Evenement {
     prixUnitaire: number;
     image: string;
     categorie: string;
-    offreIds?: number[];
-    offres?: Offre[];
   }
