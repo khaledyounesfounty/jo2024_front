@@ -49,10 +49,9 @@ const BilletList: React.FC = () => {
               primary={`${billet.idUtilisateur.utilisateurprincipal.nom} ${billet.idUtilisateur.utilisateurprincipal.prenom}`}
               secondary={`Event: ${billet.reservation.idEvent.titre} - Price: $${billet.reservation.prix}`}
             />
-            <img
-              src={getPublicImagePath(billet.qrcode.qrImage)}
-              alt="QR Code"
+            <div
               style={{ maxWidth: 200, maxHeight: 200 }}
+              dangerouslySetInnerHTML={{ __html: billet.qrcode.qrImage }}
             />
           </ListItem>
         ))}
