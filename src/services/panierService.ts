@@ -1,14 +1,6 @@
 import axiosInstance from "../utils/axiosSetup";
 
-
-const getPanierDetails = async () => {
-    try {
-        const response = await axiosInstance.get("/paniers/details");
-        return response.data;
-    } catch (error) {
-        throw error;
-    }
-}
+const getPanierDetails = () => axiosInstance.get('/paniers/details');
 
 const validerPanier = async () => {
     try {

@@ -9,9 +9,8 @@ import {
   List,
   ListItem,
   ListItemText,
-  CircularProgress,
 } from "@mui/material";
-import { PanierDto, ReservationDto } from "../types/panier";
+import { PanierDto } from "../types/panier";
 import { getPanierDetails } from "../services/panierService";
 import { useNavigate } from "react-router-dom";
 
@@ -23,6 +22,7 @@ const Panier: React.FC = () => {
     const fetchPanier = async () => {
       try {
         const response = await getPanierDetails();
+        console.log("Cart Details:", response.data);
         setCart(response.data);
       } catch (error) {
         console.error("Failed to load cart details:", error);
@@ -41,13 +41,17 @@ const Panier: React.FC = () => {
       navigate("/payment");
     }
   };
-
+  console.log("Cart Content:", cart)
   return (
     <Container>
       <Typography variant="h4" gutterBottom sx={{ mt: 2, textAlign: "center" }}>
         Vos réservations
       </Typography>
-      {cart && cart.reservations.length > 0 ? (
+      {!cart || cart.reservations.length === 0 ? (
+        <Typography variant="h6" gutterBottom>
+          Votre panier est vide
+        </Typography>
+      ) : (
         <>
           <Grid container spacing={2}>
             {cart.reservations.map((reservation) => (
@@ -100,10 +104,6 @@ const Panier: React.FC = () => {
             Valider le panier
           </Button>
         </>
-      ) : (
-        <Typography variant="h6" gutterBottom>
-          Votre panier est vide
-        </Typography>
       )}
     </Container>
   );
