@@ -14,26 +14,33 @@ axios.interceptors.response.use(
     return Promise.reject(error);
   }
 );
+const publicEndpoints = [
+    '/login',
+    '/register',
+    '/offre', // Assumes all subpaths are public
+    '/events' // Assumes all subpaths are public
+];
 
-// create an axios instance avec une base URL
 const axiosInstance = axios.create({
-  baseURL: "http://localhost:8080/api/v1",
+  baseURL: process.env.REACT_APP_BACKEND_URL,
 });
-
 axiosInstance.interceptors.request.use(
-  (config) => {
-    const token = localStorage.getItem('jwtToken');
-    console.log('Token from localStorage:', token);  // Debug: Log token value
-    if (token && config.headers) {
-      config.headers["Authorization"] = `Bearer ${token}`;
-      console.log('Headers after adding token:', config.headers);  // Debug: Log headers
+    (config:any) => {
+        const token = localStorage.getItem('jwtToken');
+        // logs the url
+        console.log("config.url : ", config.url);
+
+        // Check if the URL is not a public endpoint
+        if (!publicEndpoints.includes(config.url) && token && config.headers) {
+            config.headers["Authorization"] = `Bearer ${token}`;
+        }
+
+        return config;
+    },
+    (error) => {
+        console.error('Error in request interceptor:', error);
+        return Promise.reject(error);
     }
-    return config;
-  },
-  (error) => {
-    console.error('Error in request interceptor:', error);
-    return Promise.reject(error);
-  }
 );
 
 
