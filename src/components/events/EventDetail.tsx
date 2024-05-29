@@ -75,12 +75,6 @@ const EventDetail = () => {
       {success && <Alert severity="success">{success}</Alert>}
       {eventDetail && (
         <Card sx={{ mb: 2 }}>
-          <CardMedia
-            component="img"
-            height="140"
-            image={eventDetail.image}
-            alt={eventDetail.titre}
-          />
           <CardContent>
             <Typography gutterBottom variant="h5">
               {eventDetail.titre}

@@ -5,9 +5,8 @@ import Toolbar from "@mui/material/Toolbar";
 import IconButton from "@mui/material/IconButton";
 import Typography from "@mui/material/Typography";
 import Menu from "@mui/material/Menu";
-import MenuIcon from "@mui/icons-material/Menu";
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import Container from "@mui/material/Container";
-import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import Tooltip from "@mui/material/Tooltip";
 import MenuItem from "@mui/material/MenuItem";
@@ -22,13 +21,10 @@ let pages: { name: string; path: string }[] = [
 let settings: { name: string; path: string }[] = [];
 
 if (isAuthenticated()) {
-  settings.push({ name: "Profile", path: "/profile" });
   if (hasRole("ADMIN")) {
     pages.push({ name: "Offres", path: "/admin/offres" });
-    settings.push({ name: "Dashboard", path: "/admin" });
   } else if (hasRole("USER")) {
     settings.push({ name: "Mes Billets", path: "/billets" });
-    settings.push({ name: "Dashboard", path: "/user" });
     settings.push({ name: "Panier", path: "/user/panier" });
   }
   settings.push({ name: "Logout", path: "/logout" });
@@ -100,7 +96,7 @@ function Header() {
               onClick={handleOpenNavMenu}
               color="inherit"
             >
-              <MenuIcon />
+              <AccountCircleIcon />
             </IconButton>
             <Menu
               id="menu-appbar"
@@ -166,7 +162,7 @@ function Header() {
           <Box sx={{ flexGrow: 0 }}>
             <Tooltip title="Open settings">
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
+                <AccountCircleIcon fontSize="large" />
               </IconButton>
             </Tooltip>
             <Menu
