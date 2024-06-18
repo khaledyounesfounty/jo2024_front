@@ -23,6 +23,7 @@ let settings: { name: string; path: string }[] = [];
 if (isAuthenticated()) {
   if (hasRole("ADMIN")) {
     pages.push({ name: "Offres", path: "/admin/offres" });
+    settings.push({ name: "Dashboard", path: "/admin" });
   } else if (hasRole("USER")) {
     settings.push({ name: "Mes Billets", path: "/billets" });
     settings.push({ name: "Panier", path: "/user/panier" });

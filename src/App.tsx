@@ -19,6 +19,7 @@ import Panier from "./pages/Panier";
 import PaymentForm from "./pages/PaymentForm";
 import BilletList from "./components/billet/BilletList";
 import OffresCrud from "./components/offres/OffresCrud";
+import Dashboard from "./components/Dashboard";
 
 function App() {
   const redirectIfAuthenticated = (component: React.ReactNode) => {
@@ -54,7 +55,7 @@ function App() {
             path="/admin"
             element={
               <ProtectedRoute role="ADMIN">
-                <AdminDashboard />
+                <Dashboard />
               </ProtectedRoute>
             }
           />
